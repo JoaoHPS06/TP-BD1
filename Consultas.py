@@ -1,5 +1,6 @@
 import psycopg2
 import tkinter as tk
+import customtkinter as ctk
 from tkinter import scrolledtext, messagebox, simpledialog
 
 # ==============================
@@ -140,32 +141,63 @@ def limpar_tela():
 
 def mostrar_menu_principal():
     limpar_tela()
-    tk.Label(root, text="Menu Principal", font=("Arial", 14, "bold")).pack(pady=10)
-    
-    tk.Button(root, text="Consultas", width=30, command=mostrar_menu_consultas).pack(pady=5)
-    tk.Button(root, text="Atualização / Exclusão", width=30, command=mostrar_menu_atualizacoes).pack(pady=5)
-    tk.Button(root, text="Sair", width=30, command=sair).pack(pady=10)
+
+    container = ctk.CTkFrame(root, fg_color="transparent")
+    container.pack(expand=True, fill="both")
+
+    center_frame = ctk.CTkFrame(container, fg_color="transparent")
+    center_frame.pack(expand=True)
+
+    ctk.CTkLabel(center_frame, text="Menu Principal", font=("Arial", 20, "bold")).pack(pady=10)
+
+    frame = ctk.CTkFrame(center_frame, fg_color="transparent")
+    frame.columnconfigure(0, weight=1)
+    frame.rowconfigure((0, 1, 2), weight=1)
+
+    button_width = 200  # Set a reasonable width
+
+    ctk.CTkButton(frame, text="Consultas", width=button_width, command=mostrar_menu_consultas).grid(column=0, row=0, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Atualização / Exclusão", width=button_width, command=mostrar_menu_atualizacoes).grid(column=0, row=1, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Sair", width=button_width, command=sair).grid(column=0, row=2, pady=5, sticky="ew")
+    frame.pack(pady=20)
 
 def mostrar_menu_consultas():
     limpar_tela()
-    tk.Label(root, text="Menu de Consultas", font=("Arial", 14, "bold")).pack(pady=10)
+    ctk.CTkLabel(root, text="Menu de Consultas", font=("Arial", 20, "bold")).pack(pady=10)
+
+    frame = ctk.CTkFrame(
+        root, 
+        fg_color="transparent"
+    )
+    frame.columnconfigure(0, weight=1)
+    frame.rowconfigure((0, 1, 2, 3, 4), weight=1)
     
-    tk.Button(root, text="Projetos e Professores", width=30, command=listar_projetos_professores).pack(pady=5)
-    tk.Button(root, text="Oportunidades", width=30, command=listar_oportunidades).pack(pady=5)
-    tk.Button(root, text="Alunos por Oportunidade", width=30, command=listar_alunos_por_oportunidade).pack(pady=5)
-    tk.Button(root, text="Contribuições por Financiador", width=30, command=listar_contribuicoes_por_financiador).pack(pady=5)
+    ctk.CTkButton(frame, text="Projetos e Professores", width=30, command=listar_projetos_professores).grid(column=0, row=0, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Oportunidades", width=30, command=listar_oportunidades).grid(column=0, row=1, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Alunos por Oportunidade", width=30, command=listar_alunos_por_oportunidade).grid(column=0, row=2, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Contribuições por Financiador", width=30, command=listar_contribuicoes_por_financiador).grid(column=0, row=3, pady=5, sticky="ew")
     
-    tk.Button(root, text="Voltar", width=30, command=mostrar_menu_principal).pack(pady=10)
+    ctk.CTkButton(frame, text="Voltar", width=30, command=mostrar_menu_principal).grid(column=0, row=4, pady=5)
+    frame.pack(pady=20)
     adicionar_area_texto()
 
 def mostrar_menu_atualizacoes():
     limpar_tela()
-    tk.Label(root, text="Menu de Atualização/Exclusão", font=("Arial", 14, "bold")).pack(pady=10)
+    ctk.CTkLabel(root, text="Menu de Atualização/Exclusão", font=("Arial", 20, "bold")).pack(pady=10)
+
+    frame = ctk.CTkFrame(
+        root, 
+        fg_color="transparent"
+    )
+    frame.columnconfigure(0, weight=1)
+    frame.rowconfigure((0, 1, 2), weight=1)
     
-    tk.Button(root, text="Atualizar QtVagas", width=30, command=atualizar_qtd_vagas).pack(pady=5)
-    tk.Button(root, text="Excluir Inscrição", width=30, command=excluir_inscricao).pack(pady=5)
+    ctk.CTkButton(frame, text="Atualizar QtVagas", width=30, command=atualizar_qtd_vagas).grid(column=0, row=0, pady=5, sticky="ew")
+    ctk.CTkButton(frame, text="Excluir Inscrição", width=30, command=excluir_inscricao).grid(column=0, row=1, pady=5, sticky="ew")
     
-    tk.Button(root, text="Voltar", width=30, command=mostrar_menu_principal).pack(pady=10)
+    ctk.CTkButton(frame, text="Voltar", width=30, command=mostrar_menu_principal).grid(column=0, row=2, pady=5)
+
+    frame.pack(pady=20)
     adicionar_area_texto()
 
 # ==============================
@@ -173,7 +205,7 @@ def mostrar_menu_atualizacoes():
 # ==============================
 def adicionar_area_texto():
     global texto_area
-    texto_area = scrolledtext.ScrolledText(root, width=60, height=15)
+    texto_area = scrolledtext.ScrolledText(root, width=700, height=400)
     texto_area.pack(pady=10)
 
 # ==============================
@@ -189,8 +221,12 @@ def sair():
 # ==============================
 conn = conectar_bd()
 
-root = tk.Tk()
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
+root = ctk.CTk()
 root.title("Sistema Acadêmico - Consultas e Atualizações")
+root.geometry("1080x720")
+root.columnconfigure((0, 1), weight=1)
 
 mostrar_menu_principal()
 
